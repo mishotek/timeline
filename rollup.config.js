@@ -7,7 +7,7 @@ const copyConfig = {
     targets: [
         { src: 'node_modules/@webcomponents', dest: 'public/node_modules' },
         { src: 'index.html', dest: 'public' },
-        { src: 'src/assets', dest: 'public' },
+        { src: 'assets', dest: 'public' },
     ],
 };
 

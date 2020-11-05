@@ -1,8 +1,8 @@
 import {LitElement, html, css} from "lit-element";
 import {styleMap} from "lit-html/directives/style-map";
 import {classMap} from "lit-html/directives/class-map";
-import './wc-tooltip';
-import './wc-date';
+import '../../../components/wc-tooltip';
+import '../../../components/wc-date';
 
 export class WcTimeline extends LitElement {
     static get is() {
@@ -104,7 +104,7 @@ export class WcTimeline extends LitElement {
     constructor() {
         super();
         this.events = [];
-        this.index = 1;
+        this.index = 0;
         this._events = [];
         this._progress = '0%';
     }

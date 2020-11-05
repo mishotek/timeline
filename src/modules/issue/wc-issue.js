@@ -1,5 +1,5 @@
 import {LitElement, html, css} from "lit-element";
-import '../../components/wc-timeline';
+import './components/wc-timeline';
 
 export class WcIssue extends LitElement {
     static get is() {
