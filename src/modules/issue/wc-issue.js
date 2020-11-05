@@ -1,5 +1,6 @@
 import {LitElement, html, css} from "lit-element";
 import './components/wc-timeline';
+import './components/wc-event-slider';
 
 export class WcIssue extends LitElement {
     static get is() {
@@ -18,6 +19,11 @@ export class WcIssue extends LitElement {
                 padding: var(--space-base) var(--space-large);
                 box-sizing: border-box;
             }
+            
+            .illustration {
+                display: grid;
+                place-items: center;
+            }
         `;
     }
 
@@ -25,7 +31,7 @@ export class WcIssue extends LitElement {
         // language=html
         return html`
             <div class="illustration">
-                
+                <wc-event-slider id="slider" .events="${events}"></wc-event-slider>
             </div>
             
             <div class="timeline">
@@ -49,11 +55,13 @@ export class WcIssue extends LitElement {
     }
 
     prev() {
-        this._getTimeline.prev();
+        this._timeline.prev();
+        this._slider.prev();
     }
 
     next() {
-        this._getTimeline.next();
+        this._timeline.next();
+        this._slider.next();
     }
 
     _addScrollListener() {
@@ -71,12 +79,16 @@ export class WcIssue extends LitElement {
                 this.next();
             }
 
-            setTimeout(() => this._isTransitioning = false, 300);
+            setTimeout(() => this._isTransitioning = false, 400);
         });
     }
 
-    get _getTimeline() {
+    get _timeline() {
         return this.shadowRoot.getElementById('timeline');
+    }
+
+    get _slider() {
+        return this.shadowRoot.getElementById('slider');
     }
 }
 
@@ -86,7 +98,7 @@ const events = [
     {
         timestamp: 1099674757000,
         title: {
-            en: 'The rose revolution',
+            en: 'The Rose Revolution',
             ka: 'ვარდების რევოლუცია',
         },
         imageUrl: 'https://www.georgianjournal.ge/media/images/georgianews/2018/November/Politics/rose_revolution_2003_3.jpg',
