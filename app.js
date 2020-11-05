@@ -1,4 +1,5 @@
 import {LitElement, html, css} from "lit-element";
+import './src/modules/issue/wc-issue';
 
 export class WcApp extends LitElement {
     static get is() {
@@ -9,7 +10,7 @@ export class WcApp extends LitElement {
         // language=css
         return css`
             :host {
-                color: red;
+                display: block;
             }
         `;
     }
@@ -17,7 +18,7 @@ export class WcApp extends LitElement {
     render() {
         // language=html
         return html`
-            <p>Hello world!</p>
+            <wc-issue style="height: 100vh"></wc-issue>
         `;
     }
 }
