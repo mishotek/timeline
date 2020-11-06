@@ -43,6 +43,7 @@ export class WcTimeline extends LitElement {
                 width: var(--space-small);
                 border-radius: var(--radius-circle);
                 box-shadow: var(--shadow-10);
+                border: solid 1px var(--color-black-10);
                 
                 will-change: box-shadow, transform;
                 transition: box-shadow 0.3s, transform 0.3s;
@@ -76,7 +77,8 @@ export class WcTimeline extends LitElement {
                 ${this._events.map((event, index) => html`
                     <wc-tooltip class="event-tooltip" style="${styleMap({left: event._left})}">
                         <wc-date slot="tooltip" timestamp="${event.timestamp}"></wc-date>
-                        <div class="event ${classMap({'event--active': index === this.index})}"></div>
+                        <div class="event ${classMap({'event--active': index === this.index})}"
+                             @click="${() => this._onEventClick(index)}"></div>
                     </wc-tooltip>
                 `)}
             </div>
@@ -132,6 +134,10 @@ export class WcTimeline extends LitElement {
         }
     }
 
+    setIndex(index) {
+        this.index = index;
+    }
+
     _formatEvents(events) {
         const {minDate, maxDate} = this._getMinMaxDates(events);
 
@@ -159,6 +165,10 @@ export class WcTimeline extends LitElement {
         const maxDate = Math.max(...timestamps);
 
         return {minDate, maxDate};
+    }
+
+    _onEventClick(index) {
+        this.dispatchEvent(new CustomEvent('event-select', {detail: {index}}));
     }
 }
 

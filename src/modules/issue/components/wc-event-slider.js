@@ -71,6 +71,10 @@ export class WcEventSlider extends LitElement {
             this.index--;
         }
     }
+
+    setIndex(index) {
+        this.index = index;
+    }
 }
 
 customElements.define(WcEventSlider.is, WcEventSlider);

@@ -35,7 +35,10 @@ export class WcIssue extends LitElement {
             </div>
             
             <div class="timeline">
-                <wc-timeline id="timeline" .events="${events}"></wc-timeline>
+                <wc-timeline
+                    id="timeline"
+                    .events="${events}"
+                    @event-select="${this._onIndexSelect}"></wc-timeline>
             </div>
         `;
     }
@@ -45,13 +48,18 @@ export class WcIssue extends LitElement {
             _isTransitioning: {
                 type: Boolean,
             },
+            _touchX: {
+                type: Number,
+            },
         };
     }
 
     constructor() {
         super();
         this._isTransitioning = false;
-        this._addScrollListener();
+        this._addWheelListener();
+        this._addTouchListener();
+        this._addKeyboardListener();
     }
 
     prev() {
@@ -64,23 +72,62 @@ export class WcIssue extends LitElement {
         this._slider.next();
     }
 
-    _addScrollListener() {
+    _addWheelListener() {
         window.addEventListener('wheel', (event) => {
             if (this._isTransitioning) {
                 return;
             }
 
-            this._isTransitioning = true;
+            const goToNext = event.deltaY > 0;
+            this._transition(goToNext);
+        });
+    }
 
-            const scrolledToTop = event.deltaY < 0;
-            if (scrolledToTop) {
-                this.prev();
-            } else {
-                this.next();
+    _addTouchListener() {
+        window.addEventListener('touchstart', (event) => {
+            this._touchX = event.changedTouches[0].screenX;
+        });
+
+        window.addEventListener('touchend', (event) => {
+            if (this._isTransitioning) {
+                return;
             }
 
-            setTimeout(() => this._isTransitioning = false, 400);
+            const currTouchX = event.changedTouches[0].screenX;
+            const delta = this._touchX - currTouchX;
+            const goToNext = delta > 0;
+            this._transition(goToNext);
         });
+    }
+
+    _addKeyboardListener() {
+        document.addEventListener('keyup', (e) => {
+            const goToNext = e.code === 'ArrowRight';
+            const goToPrev = e.code === 'ArrowLeft';
+
+            if (!goToNext && !goToPrev) {
+                return;
+            }
+
+            this._transition(goToNext);
+        });
+    }
+
+    _onIndexSelect(e) {
+        const index = e.detail.index;
+        this._timeline.setIndex(index);
+        this._slider.setIndex(index);
+    }
+
+    _transition(goToNext) {
+        this._isTransitioning = true;
+        if (goToNext) {
+            this.next();
+        } else {
+            this.prev();
+        }
+
+        setTimeout(() => this._isTransitioning = false, 800);
     }
 
     get _timeline() {
